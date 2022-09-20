@@ -1,10 +1,17 @@
 const express=require('express')
 const { route } = require('../app')
+const { getTour, getTrendingTour, getCheapestTour } = require('../controllers/tour.controller')
 const router=express.Router()
 
-router.route('/').get((req,res)=>{
-    res.status(200).send("Tour Route Working!")
-})
+
+router.route('/')
+.get(getTour)
+
+router.route('/trending')
+.get(getTrendingTour)
+
+router.route('/cheapest')
+.get(getCheapestTour)
 
 
 module.exports=router
