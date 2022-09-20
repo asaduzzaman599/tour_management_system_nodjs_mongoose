@@ -1,6 +1,6 @@
 const express=require('express')
 const { route } = require('../app')
-const { getTours, createTours, updateTours } = require('../controllers/tour.controller')
+const { getTours, createTours, getTour } = require('../controllers/tour.controller')
 const router=express.Router()
 
 router.route('/')
@@ -9,5 +9,5 @@ router.route('/')
 
 
 
-router.route('/:id').patch(updateTours)
+router.route('/:id').get(getTour)
 module.exports=router

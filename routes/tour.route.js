@@ -1,11 +1,11 @@
 const express=require('express')
 const { route } = require('../app')
-const { getTour, getTrendingTour, getCheapestTour } = require('../controllers/tour.controller')
+const { updateTours, getTrendingTour, getCheapestTour } = require('../controllers/tour.controller')
 const router=express.Router()
 
 
-router.route('/')
-.get(getTour)
+router.route('/:id')
+.patch(updateTours)
 
 router.route('/trending')
 .get(getTrendingTour)
