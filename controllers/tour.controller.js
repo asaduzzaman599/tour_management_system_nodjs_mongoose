@@ -1,7 +1,34 @@
-const { createToursService } = require("../services/tour.services");
+const { createToursService, getToursService } = require("../services/tour.services");
 
 exports.getTours = async (req, res, next) => {
-    res.status(200).send("Tours Route and controller Working!")
+    try {
+      const queries={}
+        // save or create
+        if(req.query?.fields){
+          queries.fields = req.query.fields.split(",").join(' ')
+        }
+        if(req.query?.sort){
+          queries.sort = req.query.sort.split(",").join(' ')
+        }
+        
+        if(req.query?.sort && req.query?.limit){
+          const {page=1,limit=10}= req.query
+          queries.skip =( +page-1 * +limit) 
+          queries.limit = +limit
+        }
+        const result = await getToursService(queries);
+    
+        res.status(200).json({
+          status: "success",
+          data: result,
+        });
+      } catch (error) {
+        res.status(400).json({
+          status: "fail",
+          message: "can't get the data",
+          error: error.message,
+        });
+      }
 }
 exports.createTours = async (req, res, next) => {
     try {
