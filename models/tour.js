@@ -42,8 +42,7 @@ const tourSchema = mongoose.Schema({
   
    tourSchema.pre('save',function(next){
   
-    //this -> 
-     console.log(' Before saving data');
+    
        if (this.viewed != 0) {
         this.viewed = 0
       }

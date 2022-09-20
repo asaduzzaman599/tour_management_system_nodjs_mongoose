@@ -1,9 +1,9 @@
-const { createToursService, getToursService, updateToursByIdService } = require("../services/tour.services");
+const { createToursService, getToursService, updateToursByIdService, getToursByIdService } = require("../services/tour.services");
 
 exports.getTours = async (req, res, next) => {
     try {
       const queries={}
-        // save or create
+        
         if(req.query?.fields){
           queries.fields = req.query.fields.split(",").join(' ')
         }
@@ -11,7 +11,7 @@ exports.getTours = async (req, res, next) => {
           queries.sort = req.query.sort.split(",").join(' ')
         }
         
-        if(req.query?.sort && req.query?.limit){
+        if(req.query?.page && req.query?.limit){
           const {page=1,limit=10}= req.query
           queries.skip =( +page-1 * +limit) 
           queries.limit = +limit
@@ -32,7 +32,7 @@ exports.getTours = async (req, res, next) => {
 }
 exports.createTours = async (req, res, next) => {
     try {
-        // save or create
+        
     
         const result = await createToursService(req.body);
     
@@ -55,9 +55,9 @@ exports.updateTours = async (req, res, next) => {
   try {
     // save or create
     const {id} = req.params
+    
     const result = await updateToursByIdService(id,req.body);
-
-
+    
     if(result.nModified){
       res.status(200).json({
         status: "success",
@@ -74,7 +74,7 @@ exports.updateTours = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: "fail",
-      message: " Data is not inserted ",
+      message: " Data is not Updated ",
       error: error.message,
     });
   }
@@ -82,7 +82,21 @@ exports.updateTours = async (req, res, next) => {
 
 
 exports.getTour = async (req, res, next) => {
-    res.status(200).send("Tour Route and controller Working!")
+  try {
+    
+      const {id} = req.params
+      const result = await getToursByIdService(id)
+      res.status(200).json({
+        status: "success",
+        data: result,
+      });
+    } catch (error) {
+      res.status(400).json({
+        status: "fail",
+        message: "can't get the data",
+        error: error.message,
+      });
+    }
 }
 
 

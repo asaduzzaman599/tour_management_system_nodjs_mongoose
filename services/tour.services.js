@@ -2,15 +2,25 @@ const Tour = require("../models/tour");
 
 exports.getToursService = async ( queries,filters) =>{
   
-    const tours = await Tour.find(/* filters */)
+    const tours = await Tour.find()
     .select(queries.fields)
     .sort(queries.sort)
     .skip(queries.skip)
     .limit(queries.limit)
 
-  const total = await Tour.countDocuments(filters)
-  const page = Math.ceil(total/queries?.limit)
+  const total = await Tour.countDocuments()
+  const page = Math.ceil(total/queries.limit)
   return {total,page,tours};
+}
+
+exports.getToursByIdService = async ( _id) =>{
+   await Tour.updateOne(
+    {_id},
+    {$inc:{viewed:1}});
+    const tour = await Tour.findById(_id)
+    
+
+  return tour;
 }
 
 exports.createToursService = async(data) =>{
