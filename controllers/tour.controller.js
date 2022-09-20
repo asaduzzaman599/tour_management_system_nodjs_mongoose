@@ -62,7 +62,23 @@ exports.getTour = async (req, res, next) => {
 
 
 exports.getTrendingTour = async (req, res, next) => {
-    res.status(200).send("Trending Tour Route and controller Working!")
+  try{
+    const queries = {
+      sort: "-viewed",
+      limit: 3,
+    } 
+  const result = await getToursService(queries);
+    res.status(200).json({
+      status: "Top Three Viewed Tour",
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: "can't get the data",
+      error: error.message,
+    });
+  }
 }
 
 exports.getCheapestTour = async (req, res, next) => {
