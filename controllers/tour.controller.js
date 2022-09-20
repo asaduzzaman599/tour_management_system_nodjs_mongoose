@@ -11,17 +11,25 @@ exports.getTours = async (req, res, next) => {
           queries.sort = req.query.sort.split(",").join(' ')
         }
         
-        if(req.query?.page && req.query?.limit){
+        if(req.query?.limit){
           const {page=1,limit=10}= req.query
           queries.skip =( +page-1 * +limit) 
           queries.limit = +limit
         }
         const result = await getToursService(queries);
-    
+        if(!result){
+ 
+          res.status(200).json({
+            status: "success",
+            data: [],
+          });
+        }else{
+          
         res.status(200).json({
           status: "success",
           data: result,
         });
+        }
       } catch (error) {
         res.status(400).json({
           status: "fail",
@@ -86,10 +94,17 @@ exports.getTour = async (req, res, next) => {
     
       const {id} = req.params
       const result = await getToursByIdService(id)
-      res.status(200).json({
-        status: "success",
-        data: result,
-      });
+      if(!result){
+          res.status(200).json({
+            status: "success",
+            data: [],
+          });
+      }else{
+        res.status(200).json({
+          status: "success",
+          data: result,
+        });
+    }
     } catch (error) {
       res.status(400).json({
         status: "fail",
