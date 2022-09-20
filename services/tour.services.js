@@ -12,7 +12,17 @@ exports.getToursService = async ( queries,filters) =>{
   const page = Math.ceil(total/queries?.limit)
   return {total,page,tours};
 }
+
 exports.createToursService = async(data) =>{
     const tour = await Tour.create(data);
     return tour;
+}
+
+
+exports.updateToursByIdService = async(_id,data) =>{
+  const tour = await Tour.updateOne(
+    {_id},
+    {...data},
+    {runValidators: true});
+  return tour;
 }

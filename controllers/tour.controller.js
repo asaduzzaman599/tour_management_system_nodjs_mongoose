@@ -1,4 +1,4 @@
-const { createToursService, getToursService } = require("../services/tour.services");
+const { createToursService, getToursService, updateToursByIdService } = require("../services/tour.services");
 
 exports.getTours = async (req, res, next) => {
     try {
@@ -52,7 +52,32 @@ exports.createTours = async (req, res, next) => {
       }
 }
 exports.updateTours = async (req, res, next) => {
-    res.status(200).send("Tours Route and controller Working!")
+  try {
+    // save or create
+    const {id} = req.params
+    const result = await updateToursByIdService(id,req.body);
+
+
+    if(result.nModified){
+      res.status(200).json({
+        status: "success",
+        messgae: "Data updated successfully!",
+        data: result,
+      });
+    }else{
+      res.status(200).json({
+        status: "fail",
+        messgae: "No Data for updated!",
+      });
+    }
+    
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: " Data is not inserted ",
+      error: error.message,
+    });
+  }
 }
 
 
